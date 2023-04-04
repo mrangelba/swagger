@@ -55,6 +55,8 @@ func New(config ...Config) fiber.Handler {
 			},
 		)
 
+		swag.ReadDoc()
+
 		p := c.Path(utils.CopyString(c.Params("*")))
 
 		switch p {
@@ -70,6 +72,18 @@ func New(config ...Config) fiber.Handler {
 		case "", "/":
 			return c.Redirect(path.Join(prefix, defaultIndex), fiber.StatusMovedPermanently)
 		default:
+			if len(cfg.URLS) > 0 {
+				for _, url := range cfg.URLS {
+					if url.URL == p {
+						var doc string
+						if doc, err = swag.ReadDoc(url.InstanceName); err != nil {
+							return err
+						}
+						return c.Type("json").SendString(doc)
+					}
+				}
+			}
+
 			return fs(c)
 		}
 	}

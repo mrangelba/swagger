@@ -4,6 +4,12 @@ import (
 	"html/template"
 )
 
+type SwaggerURL struct {
+	URL          string `json:"url,omitempty"`
+	Name         string `json:"name,omitempty"`
+	InstanceName string `json:"instanceName,omitempty"`
+}
+
 // Config stores SwaggerUI configuration variables
 type Config struct {
 	// This parameter can be used to name different swagger document instances.
@@ -21,6 +27,8 @@ type Config struct {
 	// The URL pointing to API definition (normally swagger.json or swagger.yaml).
 	// default: "doc.json"
 	URL string `json:"url,omitempty"`
+
+	URLS []SwaggerURL `json:"urls,omitempty"`
 
 	// Enables overriding configuration parameters via URL search params.
 	// default: false
